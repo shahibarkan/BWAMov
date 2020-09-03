@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "964436167846",
+    "firebase_url": "https://bwaproject-8845a.firebaseio.com",
+    "project_id": "bwaproject-8845a",
+    "storage_bucket": "bwaproject-8845a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:964436167846:android:7b5bf8c43243eac9acf867",
+        "android_client_info": {
+          "package_name": "com.bagicode.bwamov"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "964436167846-p1v6e9ja6956d9lvnae6foae9tg29fp0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bagicode.bwamov",
+            "certificate_hash": "295f258706978bdf665cac23d028a4e870fc5286"
+          }
+        },
+        {
+          "client_id": "964436167846-ft0cet5bjoh1no318pemi58p4mu5e9tq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQaL490f2gj9yu1jU0C4JgqGK9BIHxihQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "964436167846-ft0cet5bjoh1no318pemi58p4mu5e9tq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
