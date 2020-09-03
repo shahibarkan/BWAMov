@@ -6,6 +6,13 @@ import android.os.Bundle
 import android.os.Handler
 import com.bagicode.bwamov.onboarding.OnBoardingOneActivity
 
+/*
+    ini adalah activity pertama yang akan dirun
+    tidak ada fitur spesial disini
+    hanya melakukan pending
+    beberapa detik saja.
+ */
+
 class SplashScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
