@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bagicode.bwamov.R
-import com.bagicode.bwamov.model.Plays
+import com.bagicode.bwamov.home.model.Plays
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
@@ -39,7 +39,7 @@ class PlaysAdapter(private var data: List<Plays>,
 
         private val tvImage:ImageView = view.findViewById(R.id.iv_poster_image)
 
-        fun bindItem(data:Plays, listener: (Plays) -> Unit, context: Context) {
+        fun bindItem(data: Plays, listener: (Plays) -> Unit, context: Context) {
             tvTitle.setText(data.nama)
 
             Glide.with(context)

@@ -1,4 +1,4 @@
-package com.bagicode.bwamov.home.tiket
+package com.bagicode.bwamov.home
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,14 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bagicode.bwamov.R
-import com.bagicode.bwamov.home.dashboard.ComingSoonAdapter
-import com.bagicode.bwamov.model.Film
 import com.bagicode.bwamov.utils.Preferences
-import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.fragment_tiket.*
+import com.bagicode.bwamov.wallet.MyWalletActivity
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import kotlinx.android.synthetic.main.fragment_dashboard.iv_profile
+import kotlinx.android.synthetic.main.fragment_dashboard.tv_nama
+import kotlinx.android.synthetic.main.fragment_setting.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,14 +22,12 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [TiketFragment.newInstance] factory method to
+ * Use the [SettingFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class TiketFragment : Fragment() {
+class SettingFragment : Fragment() {
 
-    private lateinit var preferences: Preferences
-    private lateinit var mDatabase : DatabaseReference
-    private  var dataList = ArrayList<Film>()
+    lateinit var preferences: Preferences
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -48,42 +46,25 @@ class TiketFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tiket, container, false)
+        return inflater.inflate(R.layout.fragment_setting, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         preferences = Preferences(context!!)
-        mDatabase = FirebaseDatabase.getInstance().getReference("Film")
 
-        rc_tiket.layoutManager = LinearLayoutManager(context)
-        getData()
-    }
+        tv_nama.text = preferences.getValues("nama")
+        tv_email.text = preferences.getValues("email")
 
-    private fun getData() {
-        mDatabase.addValueEventListener(object : ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
-                Toast.makeText(context, ""+p0.message, Toast.LENGTH_LONG).show()
-            }
+        Glide.with(this)
+            .load(preferences.getValues("url"))
+            .apply(RequestOptions.circleCropTransform())
+            .into(iv_profile)
 
-            override fun onDataChange(p0: DataSnapshot) {
-                dataList.clear()
-                for (getdataSnapshot in p0.children){
-                    val film = getdataSnapshot.getValue(Film::class.java)
-                    dataList.add(film!!)
-                }
-
-                rc_tiket.adapter = ComingSoonAdapter(dataList){
-                    var intent = Intent(context, TiketActivity::class.java).putExtra("data", it)
-                    startActivity(intent)
-                }
-
-                tv_total.setText("${dataList.size}Movies")
-            }
-
-        })
-
+        tv_my_wallet.setOnClickListener {
+            startActivity(Intent(activity, MyWalletActivity::class.java))
+        }
     }
 
     companion object {
@@ -93,12 +74,12 @@ class TiketFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment TiketFragment.
+         * @return A new instance of fragment SettingFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            TiketFragment().apply {
+            SettingFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

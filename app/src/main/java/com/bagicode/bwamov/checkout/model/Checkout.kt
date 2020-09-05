@@ -1,4 +1,4 @@
-package com.bagicode.bwamov.model
+package com.bagicode.bwamov.checkout.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

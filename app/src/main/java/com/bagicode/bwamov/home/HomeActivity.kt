@@ -6,8 +6,6 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.bagicode.bwamov.R
 import com.bagicode.bwamov.home.dashboard.DashboardFragment
-import com.bagicode.bwamov.home.setting.SettingFragment
-import com.bagicode.bwamov.home.tiket.TiketFragment
 import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : AppCompatActivity() {

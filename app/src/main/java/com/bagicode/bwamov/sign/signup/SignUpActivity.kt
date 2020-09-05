@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import com.bagicode.bwamov.R
 import com.bagicode.bwamov.sign.sigin.User
+import com.bagicode.bwamov.utils.Preferences
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
 
@@ -20,6 +21,8 @@ class SignUpActivity : AppCompatActivity() {
     lateinit var mFirebaseInstance : FirebaseDatabase
     lateinit var mDatabase : DatabaseReference
 
+    private lateinit var preferences: Preferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
@@ -28,34 +31,42 @@ class SignUpActivity : AppCompatActivity() {
         mDatabase = FirebaseDatabase.getInstance().getReference()
         mDatabaseReference = mFirebaseInstance.getReference("User")
 
-        btn_lanjutkan.setOnClickListener {
+        preferences = Preferences(this)
 
+        btn_home.setOnClickListener {
             sUsername = et_username.text.toString()
             sPassword = et_password.text.toString()
             sNama = et_nama.text.toString()
             sEmail = et_email.text.toString()
 
             if (sUsername.equals("")){
-                et_username.error = "Silahkan Username Anda"
+                et_username.error = "Silahkan isi Username"
                 et_username.requestFocus()
             } else if (sPassword.equals("")){
-                et_password.error = "Silahkan Password Anda"
+                et_password.error = "Silahkan isi Password"
                 et_password.requestFocus()
             } else if (sNama.equals("")){
-                et_nama.error = "Silahkan Nama Anda"
+                et_nama.error = "Silahkan isi Nama"
                 et_nama.requestFocus()
             } else if (sEmail.equals("")){
-                et_email.error = "Silahkan Email Anda"
+                et_email.error = "Silahkan isi Email"
                 et_email.requestFocus()
             } else {
-                saveUsername (sUsername, sPassword, sNama, sEmail)
-            }
 
+                var statusUsername = sUsername.indexOf(".")
+                if (statusUsername >= 0) {
+                    et_username.error = "Silahkan tulis Username Anda tanpa ."
+                    et_username.requestFocus()
+                } else {
+                    saveUsername(sUsername, sPassword, sNama, sEmail)
+                }
+            }
         }
     }
 
     private fun saveUsername(sUsername: String, sPassword: String, sNama: String, sEmail: String) {
-        var user = User()
+
+        val user = User()
         user.email = sEmail
         user.username = sUsername
         user.nama = sNama
@@ -67,27 +78,34 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun checkingUsername(sUsername: String, data: User) {
-        mDatabaseReference.child(sUsername).addValueEventListener(object :ValueEventListener{
-            override fun onCancelled(databaserError: DatabaseError) {
-               Toast.makeText(this@SignUpActivity, ""+databaserError.message, Toast.LENGTH_LONG).show()
-            }
-
+        mDatabaseReference.child(sUsername).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                var user = dataSnapshot.getValue(User::class.java)
-                if(user == null) {
+
+                val user = dataSnapshot.getValue(User::class.java)
+                if (user == null) {
                     mDatabaseReference.child(sUsername).setValue(data)
 
-                    var goSignUpPhotoscreen = Intent(this@SignUpActivity,
+                    preferences.setValues("nama", data.nama.toString())
+                    preferences.setValues("user", data.username.toString())
+                    preferences.setValues("saldo", "")
+                    preferences.setValues("url", "")
+                    preferences.setValues("email", data.email.toString())
+                    preferences.setValues("status", "1")
+
+                    var intent = Intent(this@SignUpActivity,
                         SignUpPhotoscreenActivity::class.java).putExtra("nama", data.nama)
-                    startActivity(goSignUpPhotoscreen)
+                    startActivity(intent)
 
                 } else {
                     Toast.makeText(this@SignUpActivity, "User sudah digunakan", Toast.LENGTH_LONG).show()
+
                 }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@SignUpActivity, ""+error.message, Toast.LENGTH_LONG).show()
             }
 
         })
     }
-
-
 }

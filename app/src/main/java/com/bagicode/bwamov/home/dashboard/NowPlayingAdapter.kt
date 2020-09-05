@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bagicode.bwamov.R
-import com.bagicode.bwamov.model.Film
+import com.bagicode.bwamov.home.model.Film
 import com.bumptech.glide.Glide
 
 class NowPlayingAdapter(private var data: List<Film>,
@@ -40,7 +40,7 @@ class NowPlayingAdapter(private var data: List<Film>,
 
         private val tvImage:ImageView = view.findViewById(R.id.iv_poster_image)
 
-        fun bindItem(data:Film, listener: (Film) -> Unit, context: Context) {
+        fun bindItem(data: Film, listener: (Film) -> Unit, context: Context) {
             tvTitle.setText(data.judul)
             tvGenre.setText(data.genre)
             tvRate.setText(data.rating)

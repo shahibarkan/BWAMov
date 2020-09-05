@@ -1,15 +1,13 @@
-package com.bagicode.bwamov.checkout
+package com.bagicode.bwamov.checkout.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bagicode.bwamov.R
-import com.bagicode.bwamov.model.Checkout
-import com.bumptech.glide.Glide
+import com.bagicode.bwamov.checkout.model.Checkout
 import java.text.NumberFormat
 import java.util.*
 
@@ -22,16 +20,18 @@ class CheckoutAdapter(private var data: List<Checkout>,
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CheckoutAdapter.ViewHolder {
+    ): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         contextAdapter = parent.context
         val inflatedView = layoutInflater.inflate(R.layout.row_item_checkout, parent, false)
-        return ViewHolder(inflatedView)
+        return ViewHolder(
+            inflatedView
+        )
     }
 
     override fun getItemCount(): Int = data.size
 
-    override fun onBindViewHolder(holder: CheckoutAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bindItem(data[position], listener, contextAdapter)
     }
 
@@ -39,7 +39,7 @@ class CheckoutAdapter(private var data: List<Checkout>,
         private val tvTitle:TextView = view.findViewById(R.id.tv_kursi)
         private val tvHarga:TextView = view.findViewById(R.id.tv_harga)
 
-        fun bindItem(data:Checkout, listener: (Checkout) -> Unit, context: Context) {
+        fun bindItem(data: Checkout, listener: (Checkout) -> Unit, context: Context) {
 
             val localID = Locale("id", "ID")
             val formatRupiah = NumberFormat.getCurrencyInstance(localID)

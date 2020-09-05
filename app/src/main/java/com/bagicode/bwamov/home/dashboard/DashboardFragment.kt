@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bagicode.bwamov.DetailActivity
 import com.bagicode.bwamov.R
-import com.bagicode.bwamov.model.Film
+import com.bagicode.bwamov.home.model.Film
 import com.bagicode.bwamov.utils.Preferences
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -53,7 +53,7 @@ class DashboardFragment : Fragment() {
         mDatabase = FirebaseDatabase.getInstance().getReference("Film")
 
         tv_nama.setText(preferences.getValues("nama"))
-        if (preferences.getValues("saldo").equals("")) {
+        if (!preferences.getValues("saldo").equals("")) {
             currency(preferences.getValues("saldo")!!.toDouble(), tv_saldo)
         }
 

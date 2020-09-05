@@ -45,8 +45,15 @@ class SignInActivity : AppCompatActivity() {
             }else if(iPassword.equals("")) {
                 et_password.error = "Silahkan tulis password Anda"
                 et_password.requestFocus()
-            }else{
-                pushLogin(iUsername, iPassword)
+            }else {
+
+                var statusUsername = iUsername.indexOf(".")
+                if (statusUsername >=0){
+                    et_username.error = "Silahkan tulis Username Anda tanpa ."
+                    et_username.requestFocus()
+                }else {
+                    pushLogin(iUsername, iPassword)
+                }
             }
         }
 

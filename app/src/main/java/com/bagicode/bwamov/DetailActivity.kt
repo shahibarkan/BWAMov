@@ -7,15 +7,13 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bagicode.bwamov.checkout.PilihBangkuActivity
 import com.bagicode.bwamov.home.dashboard.PlaysAdapter
-import com.bagicode.bwamov.model.Film
-import com.bagicode.bwamov.model.Plays
+import com.bagicode.bwamov.home.model.Film
+import com.bagicode.bwamov.home.model.Plays
 import com.bumptech.glide.Glide
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.activity_detail.tv_genre
 import kotlinx.android.synthetic.main.activity_detail.tv_kursi
-import kotlinx.android.synthetic.main.row_item_coming_soon.*
-import kotlinx.android.synthetic.main.row_item_coming_soon.tv_rate as tv_rate1
 
 class DetailActivity : AppCompatActivity() {
 

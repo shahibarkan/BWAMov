@@ -1,9 +1,13 @@
 package com.bagicode.bwamov.sign.signup
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
+import android.app.ProgressDialog.show
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -12,20 +16,26 @@ import android.view.View
 import android.widget.Toast
 import com.bagicode.bwamov.home.HomeActivity
 import com.bagicode.bwamov.R
+import com.bagicode.bwamov.sign.sigin.User
+//import com.bagicode.bwamov.sign.signin.User
 import com.bagicode.bwamov.utils.Preferences
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.github.dhaval2404.imagepicker.ImagePicker
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
 import kotlinx.android.synthetic.main.activity_sign_up_photoscreen.*
+import java.io.File
+import java.io.IOException
 import java.util.*
-import kotlin.math.log
 
 class SignUpPhotoscreenActivity : AppCompatActivity(), PermissionListener {
 
@@ -34,7 +44,7 @@ class SignUpPhotoscreenActivity : AppCompatActivity(), PermissionListener {
     lateinit var filePath: Uri
 
     lateinit var storage : FirebaseStorage
-    lateinit var storageReferensi : StorageReference
+    lateinit var storageReference : StorageReference
     lateinit var preferences: Preferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,16 +53,17 @@ class SignUpPhotoscreenActivity : AppCompatActivity(), PermissionListener {
 
         preferences = Preferences(this)
         storage = FirebaseStorage.getInstance()
-        storageReferensi = storage.getReference()
+        storageReference = storage.getReference()
 
-        tv_hello.text = "Selamat Datang\n"+intent.getStringExtra("nama")
+        tv_hello.text = "Selamat Datang\n"+ intent.getStringExtra("nama")
 
         iv_add.setOnClickListener {
             if (statusAdd) {
                 statusAdd = false
-                btn_save.visibility = View.VISIBLE
+                btn_save.visibility = View.INVISIBLE
                 iv_add.setImageResource(R.drawable.ic_btn_upload)
                 iv_profile.setImageResource(R.drawable.user_pic)
+
             } else {
 //                 Dexter.withActivity(this)
 //                     .withPermission(android.Manifest.permission.CAMERA)
@@ -66,10 +77,12 @@ class SignUpPhotoscreenActivity : AppCompatActivity(), PermissionListener {
         }
 
         btn_home.setOnClickListener {
+
             finishAffinity()
 
-            var goHome = Intent(this@SignUpPhotoscreenActivity, HomeActivity::class.java)
-            startActivity(goHome)
+            val intent = Intent(this@SignUpPhotoscreenActivity,
+                HomeActivity::class.java)
+            startActivity(intent)
         }
 
         btn_save.setOnClickListener {
@@ -78,7 +91,7 @@ class SignUpPhotoscreenActivity : AppCompatActivity(), PermissionListener {
                 progressDialog.setTitle("Uploading...")
                 progressDialog.show()
 
-                var ref = storageReferensi.child("images/"+UUID.randomUUID().toString())
+                var ref = storageReference.child("images/"+UUID.randomUUID().toString())
                 ref.putFile(filePath)
                     .addOnSuccessListener {
                         progressDialog.dismiss()
@@ -86,23 +99,22 @@ class SignUpPhotoscreenActivity : AppCompatActivity(), PermissionListener {
 
                         ref.downloadUrl.addOnSuccessListener {
                             preferences.setValues("url", it.toString())
+
+                            finishAffinity()
+                            val goHome = Intent(this, HomeActivity::class.java)
+                            startActivity(goHome)
                         }
 
-                        finishAffinity()
-                        var goHome = Intent(this@SignUpPhotoscreenActivity, HomeActivity::class.java)
-                        startActivity(goHome)
                     }
-                    .addOnFailureListener {
+                    .addOnFailureListener { e ->
                         progressDialog.dismiss()
-                        Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@SignUpPhotoscreenActivity, "Failed " + e.message, Toast.LENGTH_SHORT).show()
                     }
-                    .addOnProgressListener {
-                        taskSnapshot ->  var progress = 100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount
-                        progressDialog.setMessage("Upload"+progress.toInt()+" %")
+                    .addOnProgressListener { taskSnapshot ->
+                        val progress = 100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount
+                        progressDialog.setMessage("Uploaded " + progress.toInt() + "%")
                     }
 
-            } else  {
-                
             }
         }
     }

@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.bagicode.bwamov.R
-import com.bagicode.bwamov.model.Checkout
-import com.bagicode.bwamov.model.Film
+import com.bagicode.bwamov.checkout.model.Checkout
+import com.bagicode.bwamov.home.model.Film
 import kotlinx.android.synthetic.main.activity_pilih_bangku.*
 
 class PilihBangkuActivity : AppCompatActivity() {
@@ -36,7 +36,8 @@ class PilihBangkuActivity : AppCompatActivity() {
                 total += 1
                 beliTiket(total)
 
-                val data = Checkout("A3", "70000")
+                val data =
+                    Checkout("A3", "70000")
                 dataList.add(data)
             }
         }
@@ -53,14 +54,15 @@ class PilihBangkuActivity : AppCompatActivity() {
                 total += 1
                 beliTiket(total)
 
-                val data = Checkout("A4", "70000")
+                val data =
+                    Checkout("A4", "70000")
                 dataList.add(data)
             }
         }
 
         btn_home.setOnClickListener {
             var intent = Intent(this, CheckoutActivity::class.java)
-                .putExtra("data", dataList)
+                .putExtra("data", dataList).putExtra("datas",data)
             startActivity(intent)
         }
     }

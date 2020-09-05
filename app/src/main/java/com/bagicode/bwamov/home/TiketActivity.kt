@@ -1,13 +1,12 @@
-package com.bagicode.bwamov.home.tiket
+package com.bagicode.bwamov.home
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bagicode.bwamov.R
-import com.bagicode.bwamov.model.Checkout
-import com.bagicode.bwamov.model.Film
+import com.bagicode.bwamov.checkout.model.Checkout
+import com.bagicode.bwamov.home.model.Film
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.activity_tiket.*
 import kotlinx.android.synthetic.main.activity_tiket.tv_genre
 import kotlinx.android.synthetic.main.activity_tiket.tv_rate
@@ -20,22 +19,23 @@ class TiketActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tiket)
 
-        var data = intent.getParcelableExtra<Film>("data")
+        val data = intent.getParcelableExtra<Film>("data")
 
-        tv_title.text = data!!.judul
-        tv_genre.text = data.genre
-        tv_rate.text = data.rating
+        tv_title.text = data?.judul
+        tv_genre.text = data?.genre
+        tv_rate.text = data?.rating
 
         Glide.with(this)
-            .load(data.poster)
+            .load(data?.poster)
             .into((iv_poster_image))
 
         rc_checkout.layoutManager = LinearLayoutManager(this)
         dataList.add(Checkout("C1", ""))
         dataList.add(Checkout("C2", ""))
 
-        rc_checkout.adapter = TiketAdapter(dataList) {
+        rc_checkout.adapter =
+            TiketAdapter(dataList) {
 
-        }
+            }
     }
 }
